@@ -1,0 +1,43 @@
+info:
+  contact:
+    email: riverhohai@gmail.com
+    name: guanwei
+  license: {}
+  title: gin-example
+paths:
+  /vpi/v1/articles:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: TagId
+        in: query
+        name: tag_id
+        required: true
+        type: integer
+      - description: Title
+        in: query
+        name: title
+        type: string
+      - description: Desc
+        in: query
+        name: desc
+        type: string
+      - description: Content
+        in: query
+        name: content
+        type: string
+      - description: CreatedBy
+        in: query
+        name: created_by
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code": 200, "msg": "ok", "data": null "}'
+          schema:
+            type: string
+      summary: 添加新的文章
+swagger: "2.0"

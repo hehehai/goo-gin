@@ -82,7 +82,16 @@ func GetArticles(c *gin.Context) {
 	})
 }
 
-//添加文章
+// @Summary 添加新的文章
+// @Accept  json
+// @Produce  json
+// @Param   tag_id  query int true "TagId"
+// @Param   title  query string false "Title"
+// @Param   desc  query string false "Desc"
+// @Param   content  query string false "Content"
+// @Param   created_by  query string true "CreatedBy"
+// @Success 200 {string} string	"{"code": 200, "msg": "ok", "data": null "}"
+// @Router /vpi/v1/articles [post]
 func AddArticle(c *gin.Context) {
 	tagId := com.StrTo(c.Query("tag_id")).MustInt()
 	title := c.Query("title")
@@ -108,7 +117,7 @@ func AddArticle(c *gin.Context) {
 			data["desc"] = desc
 			data["content"] = content
 			data["created_by"] = createdBy
-			data["state"] =  state
+			data["state"] = state
 
 			models.AddArticle(data)
 			code = e.SUCCESS
@@ -123,7 +132,7 @@ func AddArticle(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
-		"msg": e.GetMsg(code),
+		"msg":  e.GetMsg(code),
 		"data": make(map[string]interface{}),
 	})
 }
@@ -190,7 +199,7 @@ func EditArticle(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
-		"msg": e.GetMsg(code),
+		"msg":  e.GetMsg(code),
 		"data": make(map[string]interface{}),
 	})
 }
@@ -218,7 +227,7 @@ func DeleteArticle(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
-		"msg": e.GetMsg(code),
+		"msg":  e.GetMsg(code),
 		"data": make(map[string]interface{}),
 	})
 }

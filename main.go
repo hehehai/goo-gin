@@ -2,28 +2,32 @@ package main
 
 import (
 	"fmt"
-	"github.com/fvbock/endless"
 	"go-gin-example/pkg/setting"
 	"go-gin-example/routers"
-	"syscall"
 	"log"
+	"net/http"
 )
+// @title gin-example
+// @verson 0.1.0
+// @contact.name guanwei
+// @contact.email riverhohai@gmail.com
 
 func main() {
-	endless.DefaultReadTimeOut = setting.ReadTimeout
-	endless.DefaultWriteTimeOut = setting.WriteTimeout
-	endless.DefaultMaxHeaderBytes = 1 << 20
+	routersInit := routers.InitRouter()
+	readTimeout := setting.ReadTimeout
+	writTimeout := setting.WriteTimeout
 	endPoint := fmt.Sprintf(":%d", setting.HTTPPort)
+	maxHeaderBytes := 1 << 20
 
-	server := endless.NewServer(endPoint, routers.InitRouter())
-
-	server.BeforeBegin = func(add string) {
-		log.Printf("Actual pid is %d", syscall.Getpid())
+	server := &http.Server{
+		Addr:           endPoint,
+		Handler:        routersInit,
+		ReadTimeout:    readTimeout,
+		WriteTimeout:   writTimeout,
+		MaxHeaderBytes: maxHeaderBytes,
 	}
 
-	err := server.ListenAndServe()
+	log.Printf("[info] start http server listening %s", endPoint)
 
-	if err != nil {
-		log.Printf("Server err: %v", err)
-	}
+	server.ListenAndServe()
 }
