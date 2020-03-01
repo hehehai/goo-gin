@@ -17,10 +17,10 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -installsuff
 
 FROM scratch AS prod
 
-COPY --from=build /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
-COPY --from=build /go/app/app /
-COPY --from=build /go/app/conf/app.ini /conf/
+COPY --from=gobuild /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+COPY --from=gobuild /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+COPY --from=gobuild /go/app/app /
+COPY --from=gobuild /go/app/conf/app.ini /conf/
 
 EXPOSE 9090
 ENTRYPOINT ["/app"]
