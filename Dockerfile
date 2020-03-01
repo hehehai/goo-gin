@@ -13,7 +13,7 @@ WORKDIR /go/app
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 -ldflags="-s -w" -installsuffix go build -o app main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -installsuffix -o app main.go
 
 FROM scratch AS prod
 
