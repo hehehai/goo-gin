@@ -1,10 +1,5 @@
 package models
 
-import (
-	"github.com/jinzhu/gorm"
-	"time"
-)
-
 type Article struct {
 	Model
 
@@ -17,14 +12,6 @@ type Article struct {
 	CreatedBy  string `json:"created_by"`
 	ModifiedBy string `json:"modified_by"`
 	State      int    `json:"state"`
-}
-
-func (a *Article) BeforeCreate(scope *gorm.Scope) error {
-	return scope.SetColumn("CreatedOn", time.Now().Unix())
-}
-
-func (a *Article) BeforeUpdate(scope *gorm.Scope) error {
-	return scope.SetColumn("ModifiedOn", time.Now().Unix())
 }
 
 //添加文章

@@ -6,6 +6,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"go-gin-example/pkg/setting"
 	"log"
+	"time"
 )
 
 //数据
@@ -52,6 +53,10 @@ func init() {
 		return tablePrefix + defaultTableName
 	}
 
+	// run callback for create, update
+	db.Callback().Create().Replace("gorm:update_time_stamp", updateTimeStampForCreateCallback)
+	db.Callback().Update().Replace("gorm:update_time_stamp", updateTimeStampForUpdateCallback)
+
 	//单表
 	db.SingularTable(true)
 	//日志
@@ -66,3 +71,36 @@ func init() {
 func CloseDB() {
 	defer db.Close()
 }
+
+// gorm callback init created_on or modified_on timeStamp
+func updateTimeStampForCreateCallback(scope *gorm.Scope) {
+	if !scope.HasError() {
+		timeNow := time.Now().Unix()
+
+		// init created time
+		if createTimeField, ok := scope.FieldByName("CreatedOn"); ok {
+			if createTimeField.IsBlank {
+				createTimeField.Set(timeNow)
+			}
+		}
+
+		//init modified time
+		if modifyTimeField, ok := scope.FieldByName("ModifiedOn"); ok {
+			if modifyTimeField.IsBlank {
+				modifyTimeField.Set(timeNow)
+			}
+		}
+	}
+}
+
+// update callback for modified_on
+func updateTimeStampForUpdateCallback(scope *gorm.Scope) {
+	if _, ok := scope.Get("gorm:update_column"); !ok {
+		scope.SetColumn("ModifiedOn", time.Now().Unix())
+	}
+}
+
+
+
+
+

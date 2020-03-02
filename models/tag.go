@@ -1,10 +1,5 @@
 package models
 
-import (
-	"github.com/jinzhu/gorm"
-	"time"
-)
-
 //tag 表结构
 type Tag struct {
 	//基础结构
@@ -14,16 +9,6 @@ type Tag struct {
 	CreatedBy  string `json:"created_by"`
 	ModifiedBy string `json:"modified_by"`
 	State      int    `json:"state"`
-}
-
-// hook 创建前
-func (t *Tag) BeforeCreate(scope *gorm.Scope) error {
-	return scope.SetColumn("CreatedOn", time.Now().Unix())
-}
-
-//hook 更新前
-func (t *Tag) BeforeUpdate(scope *gorm.Scope) error {
-	return scope.SetColumn("ModifiedOn", time.Now().Unix())
 }
 
 //标签列表 页，页大小，查询参数 => 标签列表

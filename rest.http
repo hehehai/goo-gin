@@ -17,13 +17,13 @@ DELETE http://{{base_url}}/tags/1?token={{token}}
 GET http://{{base_url}}/articles?token={{token}}
 
 ### article
-GET http://{{base_url}}/articles/0?token={{token}}
+GET http://{{base_url}}/articles/3?token={{token}}
 
 ### add article
-POST http://{{base_url}}/articles?token={{token}}&title=a best dog robot&desc=a from China make best world dog robot&content=2020年02月24日 China release a new message, China make a best world robot! this is a dog robot.&created_by=guanwei&state=0&tag_id=1
+POST http://{{base_url}}/articles?token={{token}}&title=new mewssage article&desc=a from China make best world dog robot&content=2020年02月24日 China release a new message, China make a best world robot! this is a dog robot.&created_by=guanwei&state=0&tag_id=4
 
 ### edit article
-PUT http://{{base_url}}/articles/1?token={{token}}&title=a best dog robot!&modified_by=doudou&tag_id=4
+PUT http://{{base_url}}/articles/3?token={{token}}&title=change new message article&modified_by=doudou&tag_id=4
 
 ### delete article
 DELETE http://{{base_url}}/articles/2?token={{token}}
