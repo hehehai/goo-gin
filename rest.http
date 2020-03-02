@@ -5,13 +5,13 @@ GET http://{{base_url}}/tags?token={{token}}
 GET http://{{base_url}}/tags?token={{token}}&name=24h&tate=1&page=1
 
 ### add tag
-POST http://{{base_url}}/tags?token={{token}}&name=news&state=1&created_by=guanwei
+POST http://{{base_url}}/tags?token={{token}}&name=test&state=1&created_by=guanwei
 
 ### edit tag
 PUT http://{{base_url}}/tags/1?token={{token}}&name=bad boy&state=0&modified_by=doudou
 
 ### delete tag
-DELETE http://{{base_url}}/tags/1?token={{token}}
+DELETE http://{{base_url}}/tags/7?token={{token}}
 
 ### articles
 GET http://{{base_url}}/articles?token={{token}}

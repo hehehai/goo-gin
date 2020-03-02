@@ -17,6 +17,7 @@ type Model struct {
 	ID         int `gorm:"primary_key" json:"id"`
 	CreatedOn  int `json:"created_on"`
 	ModifiedOn int `json:"modified_on"`
+	DeletedOn  int `json:"deleted_on"`
 }
 
 //初始化数据库连接
@@ -56,6 +57,9 @@ func init() {
 	// run callback for create, update
 	db.Callback().Create().Replace("gorm:update_time_stamp", updateTimeStampForCreateCallback)
 	db.Callback().Update().Replace("gorm:update_time_stamp", updateTimeStampForUpdateCallback)
+
+	// run callback for delete
+	db.Callback().Delete().Replace("gorm:delete", deleteCallback)
 
 	//单表
 	db.SingularTable(true)
@@ -100,7 +104,42 @@ func updateTimeStampForUpdateCallback(scope *gorm.Scope) {
 	}
 }
 
+// delete callback
+func deleteCallback(scope *gorm.Scope) {
+	if !scope.HasError() {
+		var extraOption string
+		if str, ok := scope.Get("gorm:delete_option"); ok {
+			extraOption = fmt.Sprint(str)
+		}
 
+		//判断是否有删除时间
+		deletedField, hasDeletedField := scope.FieldByName("DeletedOn")
 
+		if !scope.Search.Unscoped && hasDeletedField {
+			//	无删除时间，执行软删除
+			scope.Raw(fmt.Sprintf(
+				"UPDATE %v SET %v=%v%v%v",
+				scope.QuotedTableName(),
+				scope.Quote(deletedField.DBName),
+				scope.AddToVars(time.Now().Unix()),
+				addExtraSpaceIfExist(scope.CombinedConditionSql()),
+				addExtraSpaceIfExist(extraOption),
+			)).Exec()
+		} else {
+			//	执行硬删除
+			scope.Raw(fmt.Sprintf(
+				"UPDATE FROM %v%v%v",
+				scope.QuotedTableName(),
+				addExtraSpaceIfExist(scope.CombinedConditionSql()),
+				addExtraSpaceIfExist(extraOption),
+			)).Exec()
+		}
+	}
+}
 
-
+func addExtraSpaceIfExist(str string) string {
+	if str != "" {
+		return " " + str
+	}
+	return ""
+}
