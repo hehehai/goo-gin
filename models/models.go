@@ -21,26 +21,20 @@ type Model struct {
 }
 
 //初始化数据库连接
-func init() {
+func Setup() {
 	//错误，连接数据库相关配置信息
 	var (
 		err                                               error
 		dbType, dbName, user, password, host, tablePrefix string
 	)
 
-	//获取配置文件内的数据库相关配置
-	sec, err := setting.Cfg.GetSection("database")
-	if err != nil {
-		log.Fatal(2, "Fail to get section 'database': %v", err)
-	}
-
 	//获取
-	dbType = sec.Key("TYPE").String()
-	dbName = sec.Key("DB_NAME").String()
-	user = sec.Key("USER").String()
-	password = sec.Key("PASSWORD").String()
-	host = sec.Key("HOST").String()
-	tablePrefix = sec.Key("TABLE_PREFIX").String()
+	dbType = setting.DatabaseSetting.Type
+	dbName = setting.DatabaseSetting.Name
+	user = setting.DatabaseSetting.User
+	password = setting.DatabaseSetting.Password
+	host = setting.DatabaseSetting.Host
+	tablePrefix = setting.DatabaseSetting.TablePrefix
 
 	//连接数据库
 	db, err = gorm.Open(dbType, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local", user, password, host, dbName))

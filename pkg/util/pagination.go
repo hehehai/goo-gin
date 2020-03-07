@@ -14,7 +14,7 @@ func GetPage(c *gin.Context) int {
 
 	if page > 0 {
 		//查询1，数据库 0
-		result = (page - 1) * setting.PageSize
+		result = (page - 1) * setting.AppSetting.PageSize
 	}
 
 	return result

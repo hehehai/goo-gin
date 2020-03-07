@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"go-gin-example/models"
+	"go-gin-example/pkg/logging"
 	"go-gin-example/pkg/setting"
 	"go-gin-example/routers"
 	"log"
@@ -13,10 +15,14 @@ import (
 // @contact.email riverhohai@gmail.com
 
 func main() {
+	setting.Setup()
+	models.Setup()
+	logging.Setup()
+
 	routersInit := routers.InitRouter()
 	readTimeout := setting.ReadTimeout
 	writTimeout := setting.WriteTimeout
-	endPoint := fmt.Sprintf(":%d", setting.HTTPPort)
+	endPoint := fmt.Sprintf(":%d", setting.ServerSetting.HttpPort)
 	maxHeaderBytes := 1 << 20
 
 	server := &http.Server{
